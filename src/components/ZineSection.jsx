@@ -79,8 +79,8 @@ export function ZineSection({ zines = [], siteConfig = {}, onDownloadZine }) {
       {/* Thin line divider */}
       <div className="h-px bg-zinc-800/80 mb-8 sm:mb-10" />
 
-      {/* Dark Card Container with Red Pill & 2-Box Grid */}
-      <div className="bg-[#101013] border border-zinc-800/90 rounded-[28px] sm:rounded-[36px] p-6 sm:p-10 md:p-14 text-center shadow-2xl relative overflow-hidden">
+      {/* Zine Content Area (Tanpa border kotak besar) */}
+      <div className="text-center relative py-2">
         
         {/* Subtle Ambient Red Glow */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-40 bg-[#eb3d4d]/10 blur-[100px] pointer-events-none rounded-full" />
