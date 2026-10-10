@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ArticleCard } from './ArticleCard';
-import { BookOpen, Search, ChevronLeft, ChevronRight, Layers, Flame } from 'lucide-react';
+import { BookOpen, Search, ChevronLeft, ChevronRight, Flame } from 'lucide-react';
 
 export function ArticleGrid({ 
   articles, 
@@ -79,13 +79,6 @@ export function ArticleGrid({
                 ✕
               </button>
             )}
-          </div>
-
-          <div className="text-xs text-zinc-400 font-medium whitespace-nowrap bg-zinc-900/60 px-3 py-2 rounded-full border border-zinc-800 flex items-center gap-1.5">
-            <Layers className="w-3.5 h-3.5 text-red-500" />
-            <span>Total <strong className="text-zinc-100">{filtered.length}</strong> Esai</span>
-            <span className="text-zinc-600">•</span>
-            <span>Hal {currentSafePage} dari {totalPages}</span>
           </div>
         </div>
       </div>
