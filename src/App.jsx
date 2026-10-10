@@ -14,8 +14,29 @@ export function App() {
   // 1. Site Configuration State (Loaded from localStorage or initial defaults)
   const [siteConfig, setSiteConfig] = useState(() => {
     try {
-      const saved = localStorage.getItem('imm_commune_config');
-      return saved ? JSON.parse(saved) : defaultSiteConfig;
+      const saved = localStorage.getItem('commune_config_v2') || localStorage.getItem('imm_commune_config');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        let updated = false;
+        if (parsed.heroDescription && (parsed.heroDescription.includes('IMM') || parsed.heroDescription.includes('FEB') || parsed.heroDescription.includes('Muhammadiyah'))) {
+          parsed.heroDescription = defaultSiteConfig.heroDescription;
+          updated = true;
+        }
+        if (parsed.tagline && (parsed.tagline.includes('IMM') || parsed.tagline.includes('FEB') || parsed.tagline.includes('Muhammadiyah'))) {
+          parsed.tagline = defaultSiteConfig.tagline;
+          updated = true;
+        }
+        if (parsed.footerDescription && (parsed.footerDescription.includes('IMM') || parsed.footerDescription.includes('FEB') || parsed.footerDescription.includes('profetik') || parsed.footerDescription.includes('Tri Kompetensi'))) {
+          parsed.footerDescription = defaultSiteConfig.footerDescription;
+          updated = true;
+        }
+        if (updated) {
+          localStorage.setItem('commune_config_v2', JSON.stringify(parsed));
+          localStorage.setItem('imm_commune_config', JSON.stringify(parsed));
+        }
+        return parsed;
+      }
+      return defaultSiteConfig;
     } catch {
       return defaultSiteConfig;
     }
@@ -88,6 +109,7 @@ export function App() {
   // Sync siteConfig to localStorage
   useEffect(() => {
     try {
+      localStorage.setItem('commune_config_v2', JSON.stringify(siteConfig));
       localStorage.setItem('imm_commune_config', JSON.stringify(siteConfig));
     } catch (e) {
       console.error(e);

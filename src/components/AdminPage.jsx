@@ -30,7 +30,16 @@ export function AdminPage({
   onLogout 
 }) {
   const [activeTab, setActiveTab] = useState('analytics'); // 'analytics' | 'homepage' | 'articles' | 'new-article' | 'zines'
-  const [configForm, setConfigForm] = useState({ ...siteConfig });
+  const [configForm, setConfigForm] = useState(() => {
+    const initial = { ...siteConfig };
+    if (initial.heroDescription && (initial.heroDescription.includes('IMM') || initial.heroDescription.includes('FEB') || initial.heroDescription.includes('Muhammadiyah'))) {
+      initial.heroDescription = "Ruang dialektika, tulisan kritis, dan dokumentasi pemikiran intelektual kolektif gerakan mahasiswa dan pemuda pergerakan. Membela yang tertindas, menyuarakan yang terbungkam.";
+    }
+    if (initial.footerDescription && (initial.footerDescription.includes('IMM') || initial.footerDescription.includes('FEB') || initial.footerDescription.includes('profetik') || initial.footerDescription.includes('Tri Kompetensi'))) {
+      initial.footerDescription = "Sebuah ikhtiar literasi dan advokasi kolektif dalam mengartikulasikan keresahan sosial, ketimpangan ekonomi, serta meneguhkan kesadaran kritis, solidaritas perjuangan, dan kemanusiaan.";
+    }
+    return initial;
+  });
   const [savedNotice, setSavedNotice] = useState(false);
 
   // Zine Management State

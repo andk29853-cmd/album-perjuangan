@@ -1,6 +1,11 @@
 import React from 'react';
 
 export function Hero({ siteConfig, onOpenAdmin }) {
+  const rawDesc = siteConfig?.heroDescription || "";
+  const displayDescription = (rawDesc.includes('IMM') || rawDesc.includes('FEB') || rawDesc.includes('Muhammadiyah'))
+    ? "Ruang dialektika, tulisan kritis, dan dokumentasi pemikiran intelektual kolektif gerakan mahasiswa dan pemuda pergerakan. Membela yang tertindas, menyuarakan yang terbungkam."
+    : (rawDesc || "Ruang dialektika, tulisan kritis, dan dokumentasi pemikiran intelektual kolektif gerakan mahasiswa dan pemuda pergerakan.");
+
   return (
     <section className="relative overflow-hidden pt-12 pb-14 md:pt-20 md:pb-20 border-b border-zinc-800/80 bg-gradient-to-b from-black via-[#09090b] to-[#0e0e11]">
       {/* Background ambient red-black glow */}
@@ -26,7 +31,7 @@ export function Hero({ siteConfig, onOpenAdmin }) {
 
         {/* Hero Description (User requested: can be edited via Admin) */}
         <p className="max-w-2xl mx-auto text-base sm:text-lg md:text-xl text-zinc-300 font-normal leading-relaxed">
-          {siteConfig.heroDescription || "Ruang dialektika, tulisan kritis, dan dokumentasi pemikiran intelektual kolektif gerakan mahasiswa dan pemuda pergerakan."}
+          {displayDescription}
         </p>
 
       </div>

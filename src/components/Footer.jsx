@@ -1,6 +1,11 @@
 import React from 'react';
 
 export function Footer({ siteConfig, onOpenAdminLogin }) {
+  const rawFooter = siteConfig?.footerDescription || "";
+  const displayFooterDescription = (rawFooter.includes('IMM') || rawFooter.includes('FEB') || rawFooter.includes('profetik') || rawFooter.includes('Tri Kompetensi'))
+    ? "Sebuah ikhtiar literasi dan advokasi kolektif dalam mengartikulasikan keresahan sosial, ketimpangan ekonomi, serta meneguhkan kesadaran kritis, solidaritas perjuangan, dan kemanusiaan."
+    : (rawFooter || "Sebuah ikhtiar literasi dan advokasi kolektif dalam mengartikulasikan keresahan sosial, ketimpangan ekonomi, serta meneguhkan kesadaran kritis, solidaritas perjuangan, dan kemanusiaan.");
+
   return (
     <footer className="bg-black border-t border-zinc-800 text-zinc-400 py-12 md:py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -20,7 +25,7 @@ export function Footer({ siteConfig, onOpenAdminLogin }) {
           {/* Right: Footer Description */}
           <div className="max-w-2xl md:text-right">
             <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
-              {siteConfig?.footerDescription || "Sebuah ikhtiar literasi dan advokasi kolektif dalam mengartikulasikan keresahan sosial, ketimpangan ekonomi, serta meneguhkan kesadaran kritis, solidaritas perjuangan, dan kemanusiaan."}
+              {displayFooterDescription}
             </p>
           </div>
 
