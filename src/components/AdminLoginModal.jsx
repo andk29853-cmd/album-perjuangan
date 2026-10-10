@@ -12,12 +12,11 @@ export function AdminLoginModal({ isOpen, onClose, onLoginSuccess }) {
     e.preventDefault();
     setError('');
 
-    // Default credentials: username 'admin', password 'admin', 'perjuangan2026', 'commune2026', or '123456'
+    // Administrator credentials check
     const trimmedUser = username.trim().toLowerCase();
     const trimmedPass = password.trim();
 
-    if ((trimmedUser === 'admin' && (trimmedPass === 'admin' || trimmedPass === 'perjuangan2026' || trimmedPass === 'commune2026' || trimmedPass === '123456')) ||
-        (trimmedUser === 'redaksi' && (trimmedPass === 'redaksi' || trimmedPass === 'perjuangan'))) {
+    if (trimmedUser === 'album.perjuangan' && trimmedPass === 'melawanrezim.') {
       onLoginSuccess();
       setUsername('');
       setPassword('');
@@ -71,7 +70,7 @@ export function AdminLoginModal({ isOpen, onClose, onLoginSuccess }) {
                 type="text"
                 required
                 autoFocus
-                placeholder="Username admin..."
+                placeholder="Masukkan username..."
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 className="w-full bg-zinc-900 border border-zinc-700/80 rounded-xl pl-10 pr-3.5 py-2 text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-red-600 transition-all"
@@ -88,7 +87,7 @@ export function AdminLoginModal({ isOpen, onClose, onLoginSuccess }) {
               <input
                 type="password"
                 required
-                placeholder="Kata sandi..."
+                placeholder="Masukkan kata sandi..."
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full bg-zinc-900 border border-zinc-700/80 rounded-xl pl-10 pr-3.5 py-2 text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-red-600 transition-all"
@@ -103,10 +102,6 @@ export function AdminLoginModal({ isOpen, onClose, onLoginSuccess }) {
             <span>Masuk ke Panel Admin</span>
             <ArrowRight className="w-4 h-4" />
           </button>
-
-          <p className="text-[11px] text-zinc-500 text-center pt-2">
-            Default demo: username <code className="text-zinc-300 bg-zinc-800 px-1 py-0.5 rounded">admin</code> • kata sandi <code className="text-zinc-300 bg-zinc-800 px-1 py-0.5 rounded">admin</code>
-          </p>
         </form>
 
       </div>
