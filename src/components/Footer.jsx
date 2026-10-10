@@ -13,7 +13,7 @@ export function Footer({ siteConfig, onOpenAdminLogin }) {
             <img 
               src={siteConfig?.footerLogo || "/images/logo-commune.png"} 
               alt={siteConfig?.siteName || "Commune Logo"} 
-              className="h-10 sm:h-12 w-auto object-contain"
+              className="h-16 sm:h-20 md:h-24 max-w-[320px] w-auto object-contain"
             />
           </div>
 

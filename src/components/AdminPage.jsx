@@ -1012,11 +1012,11 @@ export function AdminPage({
                     Gambar Logo Footer (Sisi Kiri)
                   </label>
                   <div className="flex flex-col sm:flex-row items-center gap-4">
-                    <div className="h-16 w-44 rounded-xl bg-black border border-zinc-800 flex items-center justify-center p-2 shrink-0">
+                    <div className="h-20 w-52 rounded-xl bg-black border border-zinc-800 flex items-center justify-center p-2.5 shrink-0">
                       <img 
                         src={configForm.footerLogo || '/images/logo-commune.png'} 
                         alt="Logo Footer Preview" 
-                        className="h-10 w-auto object-contain"
+                        className="h-14 sm:h-16 w-auto object-contain"
                       />
                     </div>
                     <div className="flex-1 w-full space-y-2">
@@ -1094,7 +1094,7 @@ export function AdminPage({
                       <img 
                         src={configForm.footerLogo || '/images/logo-commune.png'} 
                         alt="Logo Footer" 
-                        className="h-8 w-auto object-contain shrink-0"
+                        className="h-12 sm:h-14 w-auto object-contain shrink-0"
                       />
                       <p className="text-xs text-zinc-400 max-w-md sm:text-right">
                         {configForm.footerDescription || "Sebuah ikhtiar literasi dan advokasi profetik..."}
