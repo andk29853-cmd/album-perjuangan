@@ -75,7 +75,7 @@ export function ArticleCard({ article, onSelectArticle, onLikeArticle, onEditArt
           {/* Author avatar & info */}
           <div className="flex items-center gap-3">
             <img 
-              src={article.author?.avatar || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100"} 
+              src={article.author?.avatar && !article.author.avatar.includes('unsplash') ? article.author.avatar : "/images/default-avatar.png"} 
               alt={article.author?.name} 
               className="w-8 h-8 rounded-full object-cover border border-zinc-700"
             />

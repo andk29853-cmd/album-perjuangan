@@ -25,7 +25,7 @@ export function AdminModal({
     excerpt: '',
     authorName: 'Kader IMM FEB',
     authorRole: 'Bidang RPK IMM FEB',
-    authorAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
+    authorAvatar: '/images/default-avatar.png',
     readTime: '5 min read',
     thumbnail: 'https://images.unsplash.com/photo-1457369804613-52c61a468e7d?w=800',
     content: '',
@@ -50,7 +50,7 @@ export function AdminModal({
       category: art.category,
       authorName: art.author?.name || '',
       authorRole: art.author?.role || '',
-      authorAvatar: art.author?.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
+      authorAvatar: (art.author?.avatar && !art.author.avatar.includes('unsplash')) ? art.author.avatar : '/images/default-avatar.png',
       readTime: art.readTime || '5 min read',
       thumbnail: art.thumbnail || '',
       content: art.content || '',
@@ -70,7 +70,7 @@ export function AdminModal({
       author: {
         name: articleForm.authorName || 'Kader IMM FEB',
         role: articleForm.authorRole || 'Komisariat IMM FEB',
-        avatar: articleForm.authorAvatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150'
+        avatar: (articleForm.authorAvatar && !articleForm.authorAvatar.includes('unsplash')) ? articleForm.authorAvatar : '/images/default-avatar.png'
       },
       date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }),
       readTime: articleForm.readTime || '5 min read',
@@ -99,7 +99,7 @@ export function AdminModal({
       excerpt: '',
       authorName: 'Kader IMM FEB',
       authorRole: 'Bidang RPK IMM FEB',
-      authorAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
+      authorAvatar: '/images/default-avatar.png',
       readTime: '5 min read',
       thumbnail: 'https://images.unsplash.com/photo-1457369804613-52c61a468e7d?w=800',
       content: '',

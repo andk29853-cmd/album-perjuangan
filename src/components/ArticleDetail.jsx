@@ -22,7 +22,7 @@ export function ArticleDetail({ article, onBack, onLikeArticle, isLiked, isBookm
     onAddComment(article.id, {
       id: 'c-' + Date.now(),
       author: authorName.trim() || 'Kader Mahasiswa',
-      avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120',
+      avatar: '/images/default-avatar.png',
       date: 'Baru saja',
       content: commentText.trim()
     });
@@ -137,7 +137,7 @@ export function ArticleDetail({ article, onBack, onLikeArticle, isLiked, isBookm
       <div className="flex items-center justify-between py-4 border-y border-zinc-800 mb-8">
         <div className="flex items-center gap-3.5">
           <img 
-            src={article.author?.avatar || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100"} 
+            src={article.author?.avatar && !article.author.avatar.includes('unsplash') ? article.author.avatar : "/images/default-avatar.png"} 
             alt={article.author?.name} 
             className="w-12 h-12 rounded-full object-cover border-2 border-red-600/40"
           />
@@ -233,7 +233,7 @@ export function ArticleDetail({ article, onBack, onLikeArticle, isLiked, isBookm
       <div className="mt-14 p-6 sm:p-8 rounded-2xl bg-[#111114] border border-zinc-800">
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
           <img 
-            src={article.author?.avatar || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150"} 
+            src={article.author?.avatar && !article.author.avatar.includes('unsplash') ? article.author.avatar : "/images/default-avatar.png"} 
             alt={article.author?.name} 
             className="w-16 h-16 rounded-full object-cover border-2 border-red-600"
           />
@@ -301,7 +301,7 @@ export function ArticleDetail({ article, onBack, onLikeArticle, isLiked, isBookm
               <div key={comment.id} className="p-4 sm:p-5 rounded-xl bg-zinc-900/60 border border-zinc-800/80">
                 <div className="flex items-center gap-3 mb-2">
                   <img 
-                    src={comment.avatar || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100"} 
+                    src={comment.avatar && !comment.avatar.includes('unsplash') ? comment.avatar : "/images/default-avatar.png"} 
                     alt={comment.author} 
                     className="w-7 h-7 rounded-full object-cover border border-zinc-700"
                   />
