@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Heart, MessageSquare, Bookmark, Share2, Clock, Check, Volume2, Send, ShieldAlert, Sparkles } from 'lucide-react';
+import { ArrowLeft, Heart, MessageSquare, Bookmark, Share2, Clock, Check, Send, ShieldAlert, Sparkles } from 'lucide-react';
 
 export function ArticleDetail({ article, onBack, onLikeArticle, isLiked, isBookmarked, onToggleBookmark, onAddComment }) {
   const [commentText, setCommentText] = useState('');
   const [authorName, setAuthorName] = useState('');
   const [copied, setCopied] = useState(false);
-  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
 
   const handleShare = () => {
     if (navigator.clipboard) {
@@ -115,7 +114,7 @@ export function ArticleDetail({ article, onBack, onLikeArticle, isLiked, isBookm
       <div className="flex items-center gap-3 mb-4 text-xs text-zinc-500">
         <span className="flex items-center gap-1.5">
           <Clock className="w-3.5 h-3.5" />
-          <span>{article.readTime}</span>
+          <span>{article.readTime || `${Math.max(1, Math.ceil((article.content?.split(/\s+/).length || 200) / 200))} min baca`}</span>
         </span>
         <span>•</span>
         <span>{article.date}</span>
@@ -187,29 +186,6 @@ export function ArticleDetail({ article, onBack, onLikeArticle, isLiked, isBookm
         </div>
       </div>
 
-      {/* Substack Audio Reading Mock Player */}
-      <div className="mb-8 p-3.5 rounded-xl bg-zinc-900/80 border border-zinc-800 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <button 
-            onClick={() => setIsPlayingAudio(!isPlayingAudio)}
-            className="w-10 h-10 rounded-full bg-red-600 hover:bg-red-700 text-white flex items-center justify-center transition-all shadow-md shadow-red-900/40"
-          >
-            <Volume2 className="w-5 h-5" />
-          </button>
-          <div>
-            <p className="text-xs font-bold text-zinc-200">
-              {isPlayingAudio ? "Memutar Narasi Suara Esai..." : "Dengarkan Esai Ini (Audio Reading)"}
-            </p>
-            <p className="text-[11px] text-zinc-500">
-              Durasi estimasi: {article.readTime} • Disuarakan oleh Commune Voice
-            </p>
-          </div>
-        </div>
-        <span className="text-xs font-mono text-zinc-400">
-          {isPlayingAudio ? "01:24" : "00:00"}
-        </span>
-      </div>
-
       {/* Featured Thumbnail */}
       {article.thumbnail && (
         <div className="mb-10 overflow-hidden rounded-2xl border border-zinc-800 shadow-2xl">
@@ -241,12 +217,9 @@ export function ArticleDetail({ article, onBack, onLikeArticle, isLiked, isBookm
             <h4 className="text-lg font-bold text-white mb-1">
               Ditulis oleh {article.author?.name}
             </h4>
-            <p className="text-sm text-zinc-400 mb-3">
-              Kader aktif Ikatan Mahasiswa Muhammadiyah Komisariat Fakultas Ekonomi dan Bisnis. Berkomitmen merawat tradisi intelektual, dialektika kritis, dan pengabdian umat.
+            <p className="text-sm text-zinc-400 leading-relaxed">
+              {article.author?.bio || article.authorBio || "Kader aktif Ikatan Mahasiswa Muhammadiyah Komisariat Fakultas Ekonomi dan Bisnis. Berkomitmen merawat tradisi intelektual, dialektika kritis, dan pengabdian umat."}
             </p>
-            <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-red-950/50 text-red-300 border border-red-900/60">
-              Kader Intelektual Progresif
-            </span>
           </div>
         </div>
       </div>

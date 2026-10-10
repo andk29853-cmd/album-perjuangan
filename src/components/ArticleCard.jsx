@@ -35,7 +35,7 @@ export function ArticleCard({ article, onSelectArticle, onLikeArticle, onEditArt
             <span>•</span>
             <span className="flex items-center gap-1">
               <Clock className="w-3.5 h-3.5" />
-              <span>{article.readTime}</span>
+              <span>{article.readTime || `${Math.max(1, Math.ceil((article.content?.split(/\s+/).length || 200) / 200))} min baca`}</span>
             </span>
           </div>
         </div>

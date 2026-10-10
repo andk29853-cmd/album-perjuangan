@@ -26,6 +26,7 @@ export function AdminModal({
     authorName: 'Kader IMM FEB',
     authorRole: 'Bidang RPK IMM FEB',
     authorAvatar: '/images/default-avatar.png',
+    authorBio: 'Kader aktif Ikatan Mahasiswa Muhammadiyah Komisariat Fakultas Ekonomi dan Bisnis. Berkomitmen merawat tradisi intelektual, dialektika kritis, dan pengabdian umat.',
     readTime: '5 min read',
     thumbnail: 'https://images.unsplash.com/photo-1457369804613-52c61a468e7d?w=800',
     content: '',
@@ -51,6 +52,7 @@ export function AdminModal({
       authorName: art.author?.name || '',
       authorRole: art.author?.role || '',
       authorAvatar: (art.author?.avatar && !art.author.avatar.includes('unsplash')) ? art.author.avatar : '/images/default-avatar.png',
+      authorBio: art.author?.bio || art.authorBio || 'Kader aktif Ikatan Mahasiswa Muhammadiyah Komisariat Fakultas Ekonomi dan Bisnis. Berkomitmen merawat tradisi intelektual, dialektika kritis, dan pengabdian umat.',
       readTime: art.readTime || '5 min read',
       thumbnail: art.thumbnail || '',
       content: art.content || '',
@@ -70,10 +72,11 @@ export function AdminModal({
       author: {
         name: articleForm.authorName || 'Kader IMM FEB',
         role: articleForm.authorRole || 'Komisariat IMM FEB',
-        avatar: (articleForm.authorAvatar && !articleForm.authorAvatar.includes('unsplash')) ? articleForm.authorAvatar : '/images/default-avatar.png'
+        avatar: (articleForm.authorAvatar && !articleForm.authorAvatar.includes('unsplash')) ? articleForm.authorAvatar : '/images/default-avatar.png',
+        bio: articleForm.authorBio || 'Kader aktif Ikatan Mahasiswa Muhammadiyah Komisariat Fakultas Ekonomi dan Bisnis. Berkomitmen merawat tradisi intelektual, dialektika kritis, dan pengabdian umat.'
       },
       date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }),
-      readTime: articleForm.readTime || '5 min read',
+      readTime: articleForm.readTime || `${Math.max(1, Math.ceil((articleForm.content ? articleForm.content.split(/\s+/).length : 200) / 200))} min baca`,
       thumbnail: articleForm.thumbnail || 'https://images.unsplash.com/photo-1541829070764-84a7d30dd3f3?w=800',
       content: articleForm.content,
       featured: articleForm.featured
@@ -100,6 +103,7 @@ export function AdminModal({
       authorName: 'Kader IMM FEB',
       authorRole: 'Bidang RPK IMM FEB',
       authorAvatar: '/images/default-avatar.png',
+      authorBio: 'Kader aktif Ikatan Mahasiswa Muhammadiyah Komisariat Fakultas Ekonomi dan Bisnis. Berkomitmen merawat tradisi intelektual, dialektika kritis, dan pengabdian umat.',
       readTime: '5 min read',
       thumbnail: 'https://images.unsplash.com/photo-1457369804613-52c61a468e7d?w=800',
       content: '',
@@ -437,13 +441,13 @@ export function AdminModal({
 
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-zinc-300 mb-1.5">
-                    Waktu Baca (Estimasi)
+                    Deskripsi / Bio Penulis
                   </label>
                   <input
                     type="text"
-                    value={articleForm.readTime}
-                    onChange={(e) => setArticleForm({ ...articleForm, readTime: e.target.value })}
-                    placeholder="Contoh: 5 min read"
+                    value={articleForm.authorBio}
+                    onChange={(e) => setArticleForm({ ...articleForm, authorBio: e.target.value })}
+                    placeholder="Contoh: Kader aktif Ikatan Mahasiswa Muhammadiyah..."
                     className="w-full bg-zinc-900 border border-zinc-700/80 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-red-600"
                   />
                 </div>
