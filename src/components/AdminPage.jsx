@@ -118,6 +118,21 @@ export function AdminPage({
     }
   };
 
+  const handleFooterLogoUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        alert('Ukuran file logo footer maksimal 5MB');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setConfigForm(prev => ({ ...prev, footerLogo: reader.result }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleThumbnailUpload = (e) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -967,6 +982,80 @@ export function AdminPage({
                 </div>
               </div>
 
+              {/* Pengaturan Footer: Logo Kiri & Deskripsi Kanan */}
+              <div className="p-5 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-zinc-200">
+                      Pengaturan Footer (Logo Kiri & Deskripsi Kanan)
+                    </label>
+                    <p className="text-[11px] text-zinc-400 mt-0.5">
+                      Ubah logo dan naskah visi/deskripsi yang muncul di bagian paling bawah web (footer)
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setConfigForm({ 
+                      ...configForm, 
+                      footerLogo: '/images/logo-commune.png',
+                      footerDescription: 'Sebuah ikhtiar literasi dan advokasi profetik dalam mengartikulasikan keresahan sosial, ketimpangan ekonomi, serta meneguhkan kembali Tri Kompetensi Dasar: Religiusitas, Intelektualitas, dan Humanitas.'
+                    })}
+                    className="text-[11px] text-red-400 hover:text-red-300 font-medium self-start sm:self-auto transition-colors"
+                  >
+                    Kembalikan ke Teks & Logo Awal
+                  </button>
+                </div>
+
+                {/* Footer Logo Upload & Preview */}
+                <div className="space-y-2 pt-1">
+                  <label className="block text-[11px] font-bold uppercase tracking-wider text-zinc-300">
+                    Gambar Logo Footer (Sisi Kiri)
+                  </label>
+                  <div className="flex flex-col sm:flex-row items-center gap-4">
+                    <div className="h-16 w-44 rounded-xl bg-black border border-zinc-800 flex items-center justify-center p-2 shrink-0">
+                      <img 
+                        src={configForm.footerLogo || '/images/logo-commune.png'} 
+                        alt="Logo Footer Preview" 
+                        className="h-10 w-auto object-contain"
+                      />
+                    </div>
+                    <div className="flex-1 w-full space-y-2">
+                      <label className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 border border-dashed border-zinc-600 text-xs font-semibold text-zinc-200 hover:text-white cursor-pointer transition-all">
+                        <Upload className="w-3.5 h-3.5 text-red-400" />
+                        <span>Unggah Logo Footer Baru dari Komputer / HP</span>
+                        <input 
+                          type="file" 
+                          accept="image/*" 
+                          className="hidden" 
+                          onChange={handleFooterLogoUpload}
+                        />
+                      </label>
+                      <input 
+                        type="url"
+                        value={configForm.footerLogo || ''}
+                        onChange={(e) => setConfigForm({ ...configForm, footerLogo: e.target.value })}
+                        placeholder="Atau tautan URL gambar (https://...)"
+                        className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-1.5 text-xs text-zinc-300 focus:outline-none focus:border-red-600"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Footer Description Input */}
+                <div className="pt-2">
+                  <label className="block text-[11px] font-bold uppercase tracking-wider text-zinc-300 mb-1.5">
+                    Naskah Deskripsi Footer (Sisi Kanan)
+                  </label>
+                  <textarea
+                    rows={3}
+                    value={configForm.footerDescription || ''}
+                    onChange={(e) => setConfigForm({ ...configForm, footerDescription: e.target.value })}
+                    placeholder="Tuliskan deskripsi visi yang tampil di sebelah kanan logo footer..."
+                    className="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-xs sm:text-sm text-zinc-200 leading-relaxed focus:outline-none focus:border-red-600"
+                  />
+                </div>
+              </div>
+
               {/* Live Preview Box */}
               <div className="pt-6 border-t border-zinc-800">
                 <span className="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-3 block">
@@ -986,7 +1075,7 @@ export function AdminPage({
                   <p className="text-sm text-zinc-400 max-w-xl mx-auto mb-8 leading-relaxed">
                     {configForm.heroDescription}
                   </p>
-                  <div className="pt-5 border-t border-zinc-800 text-left">
+                  <div className="pt-5 border-t border-zinc-800 text-left mb-6">
                     <span className="text-[10px] font-bold uppercase tracking-wider text-red-500 flex items-center gap-1 mb-1">
                       <Flame className="w-3 h-3 text-red-500" />
                       <span>KOLEKSI TULISAN & ARSIP PEMIKIRAN</span>
@@ -994,6 +1083,23 @@ export function AdminPage({
                     <h4 className="font-editorial text-xl font-bold text-white">
                       {configForm.articlesSectionTitle || "Artikel Perjuangan"}
                     </h4>
+                  </div>
+
+                  {/* Footer Live Preview */}
+                  <div className="pt-6 border-t border-zinc-800 text-left">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block mb-3">
+                      PRATINJAU FOOTER BARU
+                    </span>
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 rounded-xl bg-zinc-950 border border-zinc-800/80">
+                      <img 
+                        src={configForm.footerLogo || '/images/logo-commune.png'} 
+                        alt="Logo Footer" 
+                        className="h-8 w-auto object-contain shrink-0"
+                      />
+                      <p className="text-xs text-zinc-400 max-w-md sm:text-right">
+                        {configForm.footerDescription || "Sebuah ikhtiar literasi dan advokasi profetik..."}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>

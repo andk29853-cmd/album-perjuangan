@@ -13,6 +13,8 @@ export const defaultSiteConfig = {
   zineSectionBadge: "ZINE COMMUNE",
   zineSectionTitle: "KOLEKSI ZINE SIAP UNDUH",
   zineSectionSubtitle: "Arsip digital majalah dinding dan zine fisik dalam format gambar resolusi tinggi untuk dicetak mandiri.",
+  footerLogo: "/images/logo-commune.png",
+  footerDescription: "Sebuah ikhtiar literasi dan advokasi profetik dalam mengartikulasikan keresahan sosial, ketimpangan ekonomi, serta meneguhkan kembali Tri Kompetensi Dasar: Religiusitas, Intelektualitas, dan Humanitas.",
 };
 
 export const categories = [
