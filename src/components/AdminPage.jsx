@@ -56,10 +56,10 @@ export function AdminPage({
     title: '',
     subtitle: '',
     excerpt: '',
-    authorName: 'Kader IMM FEB',
-    authorRole: 'Bidang RPK IMM FEB',
+    authorName: 'Kolektif Redaksi',
+    authorRole: 'Kolektif Gerakan Mahasiswa',
     authorAvatar: '/images/default-avatar.png',
-    authorBio: 'Kader aktif Ikatan Mahasiswa Muhammadiyah Komisariat Fakultas Ekonomi dan Bisnis. Berkomitmen merawat tradisi intelektual, dialektika kritis, dan pengabdian umat.',
+    authorBio: 'Aktivis dan kader gerakan mahasiswa. Berkomitmen merawat tradisi intelektual, dialektika kritis, dan keberpihakan pada kaum marjinal.',
     readTime: '5 min read',
     thumbnail: '',
     content: '',
@@ -295,7 +295,7 @@ export function AdminPage({
       authorName: art.author?.name || '',
       authorRole: art.author?.role || '',
       authorAvatar: (art.author?.avatar && !art.author.avatar.includes('unsplash')) ? art.author.avatar : '/images/default-avatar.png',
-      authorBio: art.author?.bio || art.authorBio || 'Kader aktif Ikatan Mahasiswa Muhammadiyah Komisariat Fakultas Ekonomi dan Bisnis. Berkomitmen merawat tradisi intelektual, dialektika kritis, dan pengabdian umat.',
+      authorBio: art.author?.bio || art.authorBio || 'Aktivis dan kader gerakan mahasiswa. Berkomitmen merawat tradisi intelektual, dialektika kritis, dan keberpihakan pada kaum marjinal.',
       readTime: art.readTime || '5 min read',
       thumbnail: art.thumbnail || '',
       content: art.content || '',
@@ -317,10 +317,10 @@ export function AdminPage({
       subtitle: articleForm.subtitle,
       excerpt: articleForm.excerpt || articleForm.subtitle,
       author: {
-        name: articleForm.authorName || 'Kader IMM FEB',
-        role: articleForm.authorRole || 'Komisariat IMM FEB',
+        name: articleForm.authorName || 'Kolektif Redaksi',
+        role: articleForm.authorRole || 'Kolektif Gerakan Mahasiswa',
         avatar: (articleForm.authorAvatar && !articleForm.authorAvatar.includes('unsplash')) ? articleForm.authorAvatar : '/images/default-avatar.png',
-        bio: articleForm.authorBio || 'Kader aktif Ikatan Mahasiswa Muhammadiyah Komisariat Fakultas Ekonomi dan Bisnis. Berkomitmen merawat tradisi intelektual, dialektika kritis, dan pengabdian umat.'
+        bio: articleForm.authorBio || 'Aktivis dan kader gerakan mahasiswa. Berkomitmen merawat tradisi intelektual, dialektika kritis, dan keberpihakan pada kaum marjinal.'
       },
       date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }),
       readTime: articleForm.readTime || `${Math.max(1, Math.ceil((articleForm.content ? articleForm.content.split(/\s+/).length : 200) / 200))} min baca`,
@@ -348,10 +348,10 @@ export function AdminPage({
       title: '',
       subtitle: '',
       excerpt: '',
-      authorName: 'Kader IMM FEB',
-      authorRole: 'Bidang RPK IMM FEB',
+      authorName: 'Kolektif Redaksi',
+      authorRole: 'Kolektif Gerakan Mahasiswa',
       authorAvatar: '/images/default-avatar.png',
-      authorBio: 'Kader aktif Ikatan Mahasiswa Muhammadiyah Komisariat Fakultas Ekonomi dan Bisnis. Berkomitmen merawat tradisi intelektual, dialektika kritis, dan pengabdian umat.',
+      authorBio: 'Aktivis dan kader gerakan mahasiswa. Berkomitmen merawat tradisi intelektual, dialektika kritis, dan keberpihakan pada kaum marjinal.',
       readTime: '5 min read',
       thumbnail: '',
       content: '',
@@ -387,7 +387,7 @@ export function AdminPage({
                   Panel Administrator
                 </span>
                 <span className="text-[10px] bg-red-950/60 text-red-400 border border-red-900 px-1.5 py-0.2 rounded font-mono">
-                  IMM FEB
+                  COMMUNE
                 </span>
               </div>
               <p className="text-[11px] text-zinc-400">
@@ -900,7 +900,7 @@ export function AdminPage({
                   required
                   value={configForm.heroDescription}
                   onChange={(e) => setConfigForm({ ...configForm, heroDescription: e.target.value })}
-                  placeholder="Tuliskan visi intelektual IMM FEB..."
+                  placeholder="Tuliskan visi intelektual kolektif pergerakan mahasiswa..."
                   className="w-full bg-zinc-900 border border-zinc-700/80 rounded-xl p-4 text-sm text-zinc-200 leading-relaxed focus:outline-none focus:border-red-600 shadow-inner"
                 />
               </div>
@@ -1287,7 +1287,7 @@ export function AdminPage({
                     type="text"
                     value={articleForm.authorBio}
                     onChange={(e) => setArticleForm({ ...articleForm, authorBio: e.target.value })}
-                    placeholder="Contoh: Kader aktif Ikatan Mahasiswa Muhammadiyah..."
+                    placeholder="Contoh: Aktivis dan kader gerakan mahasiswa..."
                     className="w-full bg-zinc-900 border border-zinc-700/80 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-red-600"
                   />
                 </div>

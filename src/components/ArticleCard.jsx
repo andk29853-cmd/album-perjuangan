@@ -81,7 +81,7 @@ export function ArticleCard({ article, onSelectArticle, onLikeArticle, onEditArt
             />
             <div>
               <p className="text-xs font-semibold text-zinc-200 group-hover:text-white">
-                {article.author?.name || "Kader IMM"}
+                {article.author?.name || "Kolektif Redaksi"}
               </p>
               <p className="text-[11px] text-zinc-500">
                 {article.date}

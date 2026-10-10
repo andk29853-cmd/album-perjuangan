@@ -35,10 +35,10 @@ export function ZineSection({ zines = [], siteConfig = {}, onDownloadZine }) {
         } else {
           // If mock/demo without binary, create a sample printable text file or simulated PDF download
           const blob = new Blob([
-            `COMMUNE ARCHIVE & ZINE DIGITAL - IMM FEB\n\n` +
+            `COMMUNE ARCHIVE & ZINE DIGITAL - KOLEKTIF PERJUANGAN\n\n` +
             `Edisi: ${zine.edition}\n` +
             `Judul: ${zine.title}\n` +
-            `Deskripsi: ${zine.description || 'Arsip zine digital Ikatan Mahasiswa Muhammadiyah FEB.'}\n\n` +
+            `Deskripsi: ${zine.description || 'Arsip zine digital kolektif gerakan mahasiswa.'}\n\n` +
             `Dokumentasi ini siap dicetak secara mandiri oleh kader dan simpatisan perjuangan.`
           ], { type: 'text/plain;charset=utf-8' });
           const url = URL.createObjectURL(blob);

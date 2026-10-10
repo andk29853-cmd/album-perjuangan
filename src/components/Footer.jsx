@@ -20,7 +20,7 @@ export function Footer({ siteConfig, onOpenAdminLogin }) {
           {/* Right: Footer Description */}
           <div className="max-w-2xl md:text-right">
             <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
-              {siteConfig?.footerDescription || "Sebuah ikhtiar literasi dan advokasi profetik dalam mengartikulasikan keresahan sosial, ketimpangan ekonomi, serta meneguhkan kembali Tri Kompetensi Dasar: Religiusitas, Intelektualitas, dan Humanitas."}
+              {siteConfig?.footerDescription || "Sebuah ikhtiar literasi dan advokasi kolektif dalam mengartikulasikan keresahan sosial, ketimpangan ekonomi, serta meneguhkan kesadaran kritis, solidaritas perjuangan, dan kemanusiaan."}
             </p>
           </div>
 
@@ -29,7 +29,7 @@ export function Footer({ siteConfig, onOpenAdminLogin }) {
         {/* Bottom Bar: Copyright & Secret Admin Trigger */}
         <div className="pt-8 border-t border-zinc-900 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-500">
           <p>
-            © {new Date().getFullYear()} {siteConfig?.siteName || "Album Perjuangan Commune"}. Dirawat oleh Kader IMM FEB.
+            © {new Date().getFullYear()} {siteConfig?.siteName || "Album Perjuangan Commune"}. Dirawat oleh Kolektif Gerakan Mahasiswa.
           </p>
           <div className="flex items-center gap-1">
             <span 

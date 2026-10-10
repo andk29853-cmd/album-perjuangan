@@ -47,7 +47,7 @@ export function SubscribeModal({ isOpen, onClose, siteConfig, onSubscribe }) {
           Bergabung dengan Commune
         </h3>
         <p className="text-xs sm:text-sm text-zinc-400 mb-6 leading-relaxed">
-          Dapatkan setiap rilisan esai, risalah ekonomi, dan manifesto pergerakan IMM FEB langsung ke kotak masuk surel Anda. Tanpa spam, sepenuhnya independen.
+          Dapatkan setiap rilisan esai, kajian kritis, dan manifesto gerakan mahasiswa langsung ke kotak masuk surel Anda. Tanpa spam, sepenuhnya independen.
         </p>
 
         {subscribed ? (

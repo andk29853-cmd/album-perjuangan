@@ -1,11 +1,11 @@
 // Real-Time Analytics Engine for Album Perjuangan Commune
-const STORAGE_KEY = 'imm_real_analytics';
-const HEARTBEAT_KEY = 'imm_active_heartbeats';
-const SESSION_KEY = 'imm_user_session_id';
+const STORAGE_KEY = 'commune_real_analytics';
+const HEARTBEAT_KEY = 'commune_active_heartbeats';
+const SESSION_KEY = 'commune_user_session_id';
 
 // Unique ID for the current browser tab
 const TAB_ID = typeof window !== 'undefined' 
-  ? (window.__imm_tab_id || (window.__imm_tab_id = 'tab_' + Math.random().toString(36).substring(2, 9)))
+  ? (window.__commune_tab_id || (window.__commune_tab_id = 'tab_' + Math.random().toString(36).substring(2, 9)))
   : 'tab_node';
 
 // Helper to detect real device
@@ -49,7 +49,7 @@ export function detectReferrer() {
   const search = typeof window !== 'undefined' ? window.location.search : '';
 
   if (ref.includes('whatsapp') || search.includes('wa')) return 'Grup WhatsApp';
-  if (ref.includes('instagram') || search.includes('ig')) return 'Instagram IMM';
+  if (ref.includes('instagram') || search.includes('ig')) return 'Instagram Media';
   if (ref.includes('twitter') || ref.includes('t.co') || ref.includes('x.com')) return 'Twitter / X';
   if (ref.includes('facebook') || ref.includes('fb')) return 'Facebook';
   if (ref.includes('google')) return 'Google Search';
@@ -325,7 +325,7 @@ export function getAnalyticsSummary(articles = []) {
 
   const sourceColors = {
     'Grup WhatsApp': 'bg-emerald-500',
-    'Instagram IMM': 'bg-pink-500',
+    'Instagram Media': 'bg-pink-500',
     'Twitter / X': 'bg-red-500',
     'Akses Langsung': 'bg-blue-500',
     'Google Search': 'bg-amber-500',

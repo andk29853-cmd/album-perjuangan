@@ -26,7 +26,7 @@ export function Hero({ siteConfig, onOpenAdmin }) {
 
         {/* Hero Description (User requested: can be edited via Admin) */}
         <p className="max-w-2xl mx-auto text-base sm:text-lg md:text-xl text-zinc-300 font-normal leading-relaxed">
-          {siteConfig.heroDescription || "Ruang dialektika, tulisan kritis, dan dokumentasi pemikiran intelektual kader Ikatan Mahasiswa Muhammadiyah (IMM) Komisariat FEB."}
+          {siteConfig.heroDescription || "Ruang dialektika, tulisan kritis, dan dokumentasi pemikiran intelektual kolektif gerakan mahasiswa dan pemuda pergerakan."}
         </p>
 
       </div>

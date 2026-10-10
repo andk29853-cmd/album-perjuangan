@@ -21,7 +21,7 @@ export function App() {
     }
   });
 
-  // 2. Articles State (Clean slate for IMM FEB team to populate)
+  // 2. Articles State (Clean slate for collective redaksi team to populate)
   const [articles, setArticles] = useState(() => {
     try {
       const isCleaned = localStorage.getItem('imm_commune_empty_slate_v1');
@@ -40,7 +40,7 @@ export function App() {
     }
   });
 
-  // 3. Zines & E-Books State (Clean slate for IMM FEB team to upload)
+  // 3. Zines & E-Books State (Clean slate for collective redaksi team to upload)
   const [zines, setZines] = useState(() => {
     try {
       const isCleaned = localStorage.getItem('imm_commune_empty_slate_v1');

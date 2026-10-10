@@ -23,10 +23,10 @@ export function AdminModal({
     title: '',
     subtitle: '',
     excerpt: '',
-    authorName: 'Kader IMM FEB',
-    authorRole: 'Bidang RPK IMM FEB',
+    authorName: 'Kolektif Redaksi',
+    authorRole: 'Kolektif Gerakan Mahasiswa',
     authorAvatar: '/images/default-avatar.png',
-    authorBio: 'Kader aktif Ikatan Mahasiswa Muhammadiyah Komisariat Fakultas Ekonomi dan Bisnis. Berkomitmen merawat tradisi intelektual, dialektika kritis, dan pengabdian umat.',
+    authorBio: 'Aktivis dan kader gerakan mahasiswa. Berkomitmen merawat tradisi intelektual, dialektika kritis, dan keberpihakan pada kaum marjinal.',
     readTime: '5 min read',
     thumbnail: 'https://images.unsplash.com/photo-1457369804613-52c61a468e7d?w=800',
     content: '',
@@ -52,7 +52,7 @@ export function AdminModal({
       authorName: art.author?.name || '',
       authorRole: art.author?.role || '',
       authorAvatar: (art.author?.avatar && !art.author.avatar.includes('unsplash')) ? art.author.avatar : '/images/default-avatar.png',
-      authorBio: art.author?.bio || art.authorBio || 'Kader aktif Ikatan Mahasiswa Muhammadiyah Komisariat Fakultas Ekonomi dan Bisnis. Berkomitmen merawat tradisi intelektual, dialektika kritis, dan pengabdian umat.',
+      authorBio: art.author?.bio || art.authorBio || 'Aktivis dan kader gerakan mahasiswa. Berkomitmen merawat tradisi intelektual, dialektika kritis, dan keberpihakan pada kaum marjinal.',
       readTime: art.readTime || '5 min read',
       thumbnail: art.thumbnail || '',
       content: art.content || '',
@@ -70,10 +70,10 @@ export function AdminModal({
       subtitle: articleForm.subtitle,
       excerpt: articleForm.excerpt || articleForm.subtitle,
       author: {
-        name: articleForm.authorName || 'Kader IMM FEB',
-        role: articleForm.authorRole || 'Komisariat IMM FEB',
+        name: articleForm.authorName || 'Kolektif Redaksi',
+        role: articleForm.authorRole || 'Kolektif Gerakan Mahasiswa',
         avatar: (articleForm.authorAvatar && !articleForm.authorAvatar.includes('unsplash')) ? articleForm.authorAvatar : '/images/default-avatar.png',
-        bio: articleForm.authorBio || 'Kader aktif Ikatan Mahasiswa Muhammadiyah Komisariat Fakultas Ekonomi dan Bisnis. Berkomitmen merawat tradisi intelektual, dialektika kritis, dan pengabdian umat.'
+        bio: articleForm.authorBio || 'Aktivis dan kader gerakan mahasiswa. Berkomitmen merawat tradisi intelektual, dialektika kritis, dan keberpihakan pada kaum marjinal.'
       },
       date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }),
       readTime: articleForm.readTime || `${Math.max(1, Math.ceil((articleForm.content ? articleForm.content.split(/\s+/).length : 200) / 200))} min baca`,
@@ -100,10 +100,10 @@ export function AdminModal({
       title: '',
       subtitle: '',
       excerpt: '',
-      authorName: 'Kader IMM FEB',
-      authorRole: 'Bidang RPK IMM FEB',
+      authorName: 'Kolektif Redaksi',
+      authorRole: 'Kolektif Gerakan Mahasiswa',
       authorAvatar: '/images/default-avatar.png',
-      authorBio: 'Kader aktif Ikatan Mahasiswa Muhammadiyah Komisariat Fakultas Ekonomi dan Bisnis. Berkomitmen merawat tradisi intelektual, dialektika kritis, dan pengabdian umat.',
+      authorBio: 'Aktivis dan kader gerakan mahasiswa. Berkomitmen merawat tradisi intelektual, dialektika kritis, dan keberpihakan pada kaum marjinal.',
       readTime: '5 min read',
       thumbnail: 'https://images.unsplash.com/photo-1457369804613-52c61a468e7d?w=800',
       content: '',
@@ -129,7 +129,7 @@ export function AdminModal({
               <h2 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
                 <span>Admin Panel</span>
                 <span className="text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-red-950/60 text-red-400 border border-red-900">
-                  IMM FEB
+                  COMMUNE
                 </span>
               </h2>
               <p className="text-xs text-zinc-400">
@@ -447,7 +447,7 @@ export function AdminModal({
                     type="text"
                     value={articleForm.authorBio}
                     onChange={(e) => setArticleForm({ ...articleForm, authorBio: e.target.value })}
-                    placeholder="Contoh: Kader aktif Ikatan Mahasiswa Muhammadiyah..."
+                    placeholder="Contoh: Aktivis dan kader gerakan mahasiswa..."
                     className="w-full bg-zinc-900 border border-zinc-700/80 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-red-600"
                   />
                 </div>

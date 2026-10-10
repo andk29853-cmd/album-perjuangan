@@ -142,10 +142,10 @@ export function ArticleDetail({ article, onBack, onLikeArticle, isLiked, isBookm
           />
           <div>
             <h4 className="text-sm sm:text-base font-bold text-zinc-100">
-              {article.author?.name || "Kader IMM"}
+              {article.author?.name || "Kolektif Redaksi"}
             </h4>
             <p className="text-xs text-zinc-400">
-              {article.author?.role || "Ikatan Mahasiswa Muhammadiyah FEB"}
+              {article.author?.role || "Kolektif Gerakan Mahasiswa"}
             </p>
           </div>
         </div>
@@ -195,7 +195,7 @@ export function ArticleDetail({ article, onBack, onLikeArticle, isLiked, isBookm
             className="w-full h-auto max-h-[500px] object-cover"
           />
           <p className="text-center text-xs text-zinc-500 py-2.5 bg-zinc-950/60 border-t border-zinc-800">
-            Dokumentasi & Arsip Kolektif IMM FEB
+            Dokumentasi & Arsip Kolektif Pergerakan Mahasiswa
           </p>
         </div>
       )}
@@ -218,7 +218,7 @@ export function ArticleDetail({ article, onBack, onLikeArticle, isLiked, isBookm
               Ditulis oleh {article.author?.name}
             </h4>
             <p className="text-sm text-zinc-400 leading-relaxed">
-              {article.author?.bio || article.authorBio || "Kader aktif Ikatan Mahasiswa Muhammadiyah Komisariat Fakultas Ekonomi dan Bisnis. Berkomitmen merawat tradisi intelektual, dialektika kritis, dan pengabdian umat."}
+              {article.author?.bio || article.authorBio || "Aktivis dan kader gerakan mahasiswa. Berkomitmen merawat tradisi intelektual, dialektika kritis, dan keberpihakan pada kaum marjinal."}
             </p>
           </div>
         </div>
@@ -240,7 +240,7 @@ export function ArticleDetail({ article, onBack, onLikeArticle, isLiked, isBookm
           <div className="mb-3">
             <input
               type="text"
-              placeholder="Nama / Identitas Anda (Contoh: Kader IMM FEB Angkatan 2024)"
+              placeholder="Nama / Identitas Anda (Contoh: Kader Pergerakan / Mahasiswa)"
               value={authorName}
               onChange={(e) => setAuthorName(e.target.value)}
               className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3.5 py-2 text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-red-600"

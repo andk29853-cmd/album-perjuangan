@@ -12,12 +12,12 @@ export function AdminLoginModal({ isOpen, onClose, onLoginSuccess }) {
     e.preventDefault();
     setError('');
 
-    // Default credentials: username 'admin', password 'admin' or 'immfeb2026'
+    // Default credentials: username 'admin', password 'admin', 'perjuangan2026', 'commune2026', or '123456'
     const trimmedUser = username.trim().toLowerCase();
     const trimmedPass = password.trim();
 
-    if ((trimmedUser === 'admin' && (trimmedPass === 'admin' || trimmedPass === 'immfeb2026' || trimmedPass === '123456')) ||
-        (trimmedUser === 'redaksi' && trimmedPass === 'immfeb')) {
+    if ((trimmedUser === 'admin' && (trimmedPass === 'admin' || trimmedPass === 'perjuangan2026' || trimmedPass === 'commune2026' || trimmedPass === '123456')) ||
+        (trimmedUser === 'redaksi' && (trimmedPass === 'redaksi' || trimmedPass === 'perjuangan'))) {
       onLoginSuccess();
       setUsername('');
       setPassword('');
