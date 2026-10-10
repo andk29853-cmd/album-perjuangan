@@ -94,16 +94,27 @@ export function ArticleGrid({
       {displayedArticles.length === 0 ? (
         <div className="text-center py-20 px-4 bg-zinc-900/30 rounded-2xl border border-dashed border-zinc-800">
           <BookOpen className="w-12 h-12 text-zinc-600 mx-auto mb-3" />
-          <h3 className="text-lg font-bold text-zinc-300 mb-1">Belum Ada Tulisan yang Ditemukan</h3>
-          <p className="text-sm text-zinc-500 max-w-md mx-auto mb-4">
-            Tidak menemukan artikel dengan kata kunci "{localSearch}".
-          </p>
-          <button
-            onClick={() => { setLocalSearch(''); setCurrentPage(1); }}
-            className="px-4 py-2 text-xs font-bold bg-zinc-800 hover:bg-zinc-700 text-white rounded-lg transition-colors"
-          >
-            Tampilkan Semua Artikel
-          </button>
+          {articles.length === 0 ? (
+            <>
+              <h3 className="text-lg font-bold text-zinc-300 mb-1">Belum Ada Tulisan yang Diterbitkan</h3>
+              <p className="text-sm text-zinc-500 max-w-md mx-auto mb-2">
+                Ruang dialektika dan arsip tulisan siap diisi. Kader redaksi dapat mulai menulis dan menerbitkan naskah artikel melalui Dasbor Admin.
+              </p>
+            </>
+          ) : (
+            <>
+              <h3 className="text-lg font-bold text-zinc-300 mb-1">Belum Ada Tulisan yang Ditemukan</h3>
+              <p className="text-sm text-zinc-500 max-w-md mx-auto mb-4">
+                Tidak menemukan artikel dengan kata kunci "{localSearch}".
+              </p>
+              <button
+                onClick={() => { setLocalSearch(''); setCurrentPage(1); }}
+                className="px-4 py-2 text-xs font-bold bg-zinc-800 hover:bg-zinc-700 text-white rounded-lg transition-colors"
+              >
+                Tampilkan Semua Artikel
+              </button>
+            </>
+          )}
         </div>
       ) : (
         <>

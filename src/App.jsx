@@ -21,23 +21,36 @@ export function App() {
     }
   });
 
-  // 2. Articles State (Loaded from localStorage or initial articles)
+  // 2. Articles State (Clean slate for IMM FEB team to populate)
   const [articles, setArticles] = useState(() => {
     try {
+      const isCleaned = localStorage.getItem('imm_commune_empty_slate_v1');
+      if (!isCleaned) {
+        localStorage.setItem('imm_commune_empty_slate_v1', 'true');
+        localStorage.removeItem('imm_commune_articles');
+        localStorage.removeItem('imm_commune_zines');
+        localStorage.removeItem('imm_commune_likes');
+        localStorage.removeItem('imm_commune_bookmarks');
+        return [];
+      }
       const saved = localStorage.getItem('imm_commune_articles');
-      return saved ? JSON.parse(saved) : initialArticles;
+      return saved ? JSON.parse(saved) : [];
     } catch {
-      return initialArticles;
+      return [];
     }
   });
 
-  // 3. Zines & E-Books State (Loaded from localStorage or initial zines)
+  // 3. Zines & E-Books State (Clean slate for IMM FEB team to upload)
   const [zines, setZines] = useState(() => {
     try {
+      const isCleaned = localStorage.getItem('imm_commune_empty_slate_v1');
+      if (!isCleaned) {
+        return [];
+      }
       const saved = localStorage.getItem('imm_commune_zines');
-      return saved ? JSON.parse(saved) : initialZines;
+      return saved ? JSON.parse(saved) : [];
     } catch {
-      return initialZines;
+      return [];
     }
   });
 
