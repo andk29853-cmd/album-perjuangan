@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Heart, MessageSquare, Bookmark, Share2, Clock, Check } from 'lucide-react';
+import { Heart, MessageSquare, Bookmark, Share2, Clock, Check, Play } from 'lucide-react';
+import { isVideoMedia, getEmbedVideoUrl } from '../utils/media';
 
 export function ArticleCard({ article, onSelectArticle, onLikeArticle, onEditArticle, isLiked, isBookmarked, onToggleBookmark }) {
   const [copied, setCopied] = useState(false);
@@ -40,17 +41,42 @@ export function ArticleCard({ article, onSelectArticle, onLikeArticle, onEditArt
           </div>
         </div>
 
-        {/* Thumbnail Image (Substack card style) */}
+        {/* Thumbnail Image / Video (Substack card style) */}
         {article.thumbnail && (
           <div className="relative mb-5 overflow-hidden rounded-xl aspect-[16/9] bg-zinc-900 border border-zinc-800">
-            <img 
-              src={article.thumbnail} 
-              alt={article.title} 
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-              loading="lazy"
-            />
+            {isVideoMedia(article.thumbnail) ? (
+              <div className="relative w-full h-full bg-black">
+                {getEmbedVideoUrl(article.thumbnail) ? (
+                  <iframe 
+                    src={getEmbedVideoUrl(article.thumbnail)} 
+                    title={article.title}
+                    className="w-full h-full pointer-events-none"
+                  />
+                ) : (
+                  <video 
+                    src={article.thumbnail} 
+                    className="w-full h-full object-cover"
+                    muted 
+                    loop 
+                    playsInline 
+                    autoPlay
+                  />
+                )}
+                <div className="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-full bg-black/80 backdrop-blur-sm border border-zinc-700 text-[10px] text-white flex items-center gap-1 font-semibold pointer-events-none">
+                  <Play className="w-2.5 h-2.5 fill-red-500 text-red-500" />
+                  <span>Video</span>
+                </div>
+              </div>
+            ) : (
+              <img 
+                src={article.thumbnail} 
+                alt={article.title} 
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                loading="lazy"
+              />
+            )}
             {article.featured && (
-              <span className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-black/80 text-white border border-red-600 backdrop-blur-sm">
+              <span className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-black/80 text-white border border-red-600 backdrop-blur-sm z-10">
                 Pilihan Redaksi
               </span>
             )}

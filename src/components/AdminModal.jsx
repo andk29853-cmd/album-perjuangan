@@ -455,13 +455,13 @@ export function AdminModal({
 
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-zinc-300 mb-1.5">
-                  URL Thumbnail Gambar
+                  Media / Thumbnail Artikel (Gambar atau Video)
                 </label>
                 <input
                   type="url"
                   value={articleForm.thumbnail}
                   onChange={(e) => setArticleForm({ ...articleForm, thumbnail: e.target.value })}
-                  placeholder="https://images.unsplash.com/..."
+                  placeholder="Contoh: https://... (Gambar, MP4, atau video YouTube/Vimeo)"
                   className="w-full bg-zinc-900 border border-zinc-700/80 rounded-xl px-4 py-2 text-sm text-zinc-200 focus:outline-none focus:border-red-600"
                 />
               </div>

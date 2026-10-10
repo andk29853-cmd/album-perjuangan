@@ -7,12 +7,14 @@ import {
   Upload, Image as ImageIcon, AlignLeft, AlignCenter, AlignRight, AlignJustify,
   Bold, Italic, Underline, Strikethrough, Heading1, Heading2, Heading3, 
   List, ListOrdered, Quote, Minus, Type, Check,
-  ArrowDownToLine, BookOpen, FileCheck, FileDown, FolderDown, File
+  ArrowDownToLine, BookOpen, FileCheck, FileDown, FolderDown, File,
+  Video, Film, Play
 } from 'lucide-react';
 import { 
   getAnalyticsSummary, 
   resetAnalyticsData 
 } from '../utils/analytics';
+import { isVideoMedia, getEmbedVideoUrl } from '../utils/media';
 
 export function AdminPage({ 
   siteConfig, 
@@ -146,8 +148,10 @@ export function AdminPage({
   const handleThumbnailUpload = (e) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (file.size > 8 * 1024 * 1024) {
-        alert('Ukuran file thumbnail maksimal 8MB');
+      const isVideo = file.type.startsWith('video/');
+      const maxSize = isVideo ? 30 * 1024 * 1024 : 10 * 1024 * 1024;
+      if (file.size > maxSize) {
+        alert(`Ukuran file ${isVideo ? 'video' : 'gambar'} maksimal ${isVideo ? '30MB' : '10MB'}`);
         return;
       }
       const reader = new FileReader();
@@ -1302,26 +1306,44 @@ export function AdminPage({
                 </div>
               </div>
 
-              {/* Thumbnail Upload dari Media Komputer / HP */}
+              {/* Media / Thumbnail Upload dari Media Komputer / HP */}
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-zinc-300 mb-2">
-                  Thumbnail Artikel (Media Upload) <span className="text-red-500">*</span>
+                  Media / Thumbnail Artikel (Gambar atau Video) <span className="text-red-500">*</span>
                 </label>
                 
                 {articleForm.thumbnail ? (
                   <div className="relative rounded-2xl overflow-hidden border border-zinc-700 bg-zinc-900 group">
-                    <img 
-                      src={articleForm.thumbnail} 
-                      alt="Thumbnail Preview" 
-                      className="w-full h-48 sm:h-56 object-cover"
-                    />
+                    {isVideoMedia(articleForm.thumbnail) ? (
+                      getEmbedVideoUrl(articleForm.thumbnail) ? (
+                        <iframe 
+                          src={getEmbedVideoUrl(articleForm.thumbnail)}
+                          title="Video Preview"
+                          className="w-full h-56 sm:h-64 border-0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        />
+                      ) : (
+                        <video 
+                          src={articleForm.thumbnail} 
+                          controls 
+                          className="w-full h-56 sm:h-64 object-contain bg-black"
+                        />
+                      )
+                    ) : (
+                      <img 
+                        src={articleForm.thumbnail} 
+                        alt="Thumbnail Preview" 
+                        className="w-full h-48 sm:h-56 object-cover"
+                      />
+                    )}
                     <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
                       <label className="px-4 py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-semibold cursor-pointer border border-zinc-600 transition-all flex items-center gap-1.5 shadow-lg">
                         <Upload className="w-3.5 h-3.5 text-red-400" />
-                        <span>Ganti Gambar Media</span>
+                        <span>Ganti Media</span>
                         <input 
                           type="file" 
-                          accept="image/*" 
+                          accept="image/*,video/*" 
                           className="hidden" 
                           onChange={handleThumbnailUpload}
                         />
@@ -1338,14 +1360,14 @@ export function AdminPage({
                     <div className="p-3 bg-zinc-950/90 border-t border-zinc-800 flex items-center justify-between text-[11px] text-zinc-400">
                       <span className="flex items-center gap-1 text-emerald-400 font-medium">
                         <Check className="w-3.5 h-3.5" />
-                        Gambar Media Terpasang
+                        {isVideoMedia(articleForm.thumbnail) ? 'Media Video Terpasang' : 'Gambar Media Terpasang'}
                       </span>
                       <button
                         type="button"
                         onClick={() => setArticleForm({ ...articleForm, thumbnail: '' })}
                         className="text-red-400 hover:underline"
                       >
-                        Hapus Thumbnail
+                        Hapus Media
                       </button>
                     </div>
                   </div>
@@ -1353,17 +1375,17 @@ export function AdminPage({
                   <div className="space-y-2">
                     <label className="flex flex-col items-center justify-center p-8 border-2 border-dashed border-zinc-700 hover:border-red-500 rounded-2xl bg-zinc-900/40 hover:bg-zinc-900/80 cursor-pointer transition-all group">
                       <div className="w-12 h-12 rounded-full bg-zinc-800 group-hover:bg-red-950/60 border border-zinc-700 group-hover:border-red-800 flex items-center justify-center mb-3 transition-colors">
-                        <Upload className="w-6 h-6 text-zinc-400 group-hover:text-red-400" />
+                        <Film className="w-6 h-6 text-zinc-400 group-hover:text-red-400" />
                       </div>
                       <span className="text-xs sm:text-sm font-bold text-zinc-200 group-hover:text-white">
-                        Klik untuk Unggah Gambar Thumbnail dari Komputer / HP
+                        Klik untuk Unggah Gambar atau Video dari Komputer / HP
                       </span>
                       <span className="text-[11px] text-zinc-500 mt-1">
-                        Format yang didukung: JPG, PNG, WEBP, GIF (Maksimal 8MB)
+                        Format didukung: JPG, PNG, WEBP, GIF, MP4, WebM (Maksimal 30MB untuk video)
                       </span>
                       <input 
                         type="file" 
-                        accept="image/*" 
+                        accept="image/*,video/*" 
                         className="hidden" 
                         onChange={handleThumbnailUpload}
                       />
@@ -1376,7 +1398,7 @@ export function AdminPage({
                         type="url"
                         value={articleForm.thumbnail}
                         onChange={(e) => setArticleForm({ ...articleForm, thumbnail: e.target.value })}
-                        placeholder="https://images.unsplash.com/..."
+                        placeholder="Contoh: https://... (Gambar, MP4, atau tautan video YouTube/Vimeo)"
                         className="flex-1 bg-zinc-950 border border-zinc-800 rounded-lg px-2.5 py-1 text-xs text-zinc-300 focus:outline-none focus:border-red-600"
                       />
                     </div>

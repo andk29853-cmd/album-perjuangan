@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Heart, MessageSquare, Bookmark, Share2, Clock, Check, Send, ShieldAlert, Sparkles } from 'lucide-react';
+import { ArrowLeft, Heart, MessageSquare, Bookmark, Share2, Clock, Check, Send, ShieldAlert, Sparkles, Play } from 'lucide-react';
+import { isVideoMedia, getEmbedVideoUrl } from '../utils/media';
 
 export function ArticleDetail({ article, onBack, onLikeArticle, isLiked, isBookmarked, onToggleBookmark, onAddComment }) {
   const [commentText, setCommentText] = useState('');
@@ -186,14 +187,37 @@ export function ArticleDetail({ article, onBack, onLikeArticle, isLiked, isBookm
         </div>
       </div>
 
-      {/* Featured Thumbnail */}
+      {/* Featured Thumbnail or Video */}
       {article.thumbnail && (
-        <div className="mb-10 overflow-hidden rounded-2xl border border-zinc-800 shadow-2xl">
-          <img 
-            src={article.thumbnail} 
-            alt={article.title} 
-            className="w-full h-auto max-h-[500px] object-cover"
-          />
+        <div className="mb-10 overflow-hidden rounded-2xl border border-zinc-800 shadow-2xl bg-black">
+          {isVideoMedia(article.thumbnail) ? (
+            getEmbedVideoUrl(article.thumbnail) ? (
+              <div className="aspect-[16/9] w-full">
+                <iframe 
+                  src={getEmbedVideoUrl(article.thumbnail)} 
+                  title={article.title}
+                  className="w-full h-full border-0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+            ) : (
+              <video 
+                src={article.thumbnail} 
+                controls 
+                autoPlay 
+                muted 
+                playsInline 
+                className="w-full max-h-[550px] object-contain mx-auto"
+              />
+            )
+          ) : (
+            <img 
+              src={article.thumbnail} 
+              alt={article.title} 
+              className="w-full h-auto max-h-[500px] object-cover"
+            />
+          )}
           <p className="text-center text-xs text-zinc-500 py-2.5 bg-zinc-950/60 border-t border-zinc-800">
             Dokumentasi & Arsip Kolektif Pergerakan Mahasiswa
           </p>
