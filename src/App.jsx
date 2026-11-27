@@ -9,6 +9,17 @@ import { ZineSection } from './components/ZineSection';
 import { Footer } from './components/Footer';
 import { defaultSiteConfig, initialArticles, initialZines } from './data/initialData';
 import { recordVisit, recordArticleView, recordReadingTime, sendHeartbeat } from './utils/analytics';
+import {
+  isSupabaseConfigured,
+  fetchAllContentFromSupabase,
+  saveSiteConfigRemote,
+  upsertArticleRemote,
+  updateArticleFieldsRemote,
+  deleteArticleRemote,
+  upsertZineRemote,
+  updateZineFieldsRemote,
+  deleteZineRemote,
+} from './lib/supabase';
 
 export function App() {
   // 1. Site Configuration State (Loaded from localStorage or initial defaults)
@@ -106,6 +117,35 @@ export function App() {
     }
   });
 
+  const [syncError, setSyncError] = useState('');
+
+  // Fetch global content from Supabase on initial load
+  useEffect(() => {
+    if (!isSupabaseConfigured) return;
+
+    let cancelled = false;
+    fetchAllContentFromSupabase()
+      .then((data) => {
+        if (cancelled || !data) return;
+        if (data.config) {
+          setSiteConfig((prev) => ({ ...prev, ...data.config }));
+        }
+        if (Array.isArray(data.articles)) {
+          setArticles(data.articles);
+        }
+        if (Array.isArray(data.zines)) {
+          setZines(data.zines);
+        }
+      })
+      .catch((err) => {
+        console.error('Failed to load Supabase data:', err);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   // Sync siteConfig to localStorage
   useEffect(() => {
     try {
@@ -168,10 +208,14 @@ export function App() {
   }, []);
 
   const handleSelectArticle = (art) => {
-    setSelectedArticle(art);
+    const nextViews = (art.views || 0) + 1;
+    const updatedArt = { ...art, views: nextViews };
+    setSelectedArticle(updatedArt);
+    setArticles(prev => prev.map(item => item.id === art.id ? updatedArt : item));
     recordArticleView(art.id);
     recordVisit(`/artikel/${art.id}`);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    updateArticleFieldsRemote(art.id, { views: nextViews });
   };
 
   // Handlers for Admin
@@ -206,11 +250,24 @@ export function App() {
     }
   };
 
-  const handleSaveSiteConfig = (newConfig) => {
-    setSiteConfig(newConfig);
+  const reportSyncError = (context, error) => {
+    if (!error) {
+      setSyncError('');
+      return;
+    }
+    console.error(`${context}:`, error);
+    const msg = `Gagal sinkronisasi ke Supabase (${context}): ${error.message || 'Periksa konfigurasi & SQL Supabase.'}`;
+    setSyncError(msg);
+    alert(msg);
   };
 
-  const handleResetDefaults = () => {
+  const handleSaveSiteConfig = async (newConfig) => {
+    setSiteConfig(newConfig);
+    const { error } = await saveSiteConfigRemote(newConfig);
+    reportSyncError('Simpan Konfigurasi', error);
+  };
+
+  const handleResetDefaults = async () => {
     if (window.confirm('Kembalikan judul beranda, deskripsi, zine, dan konfigurasi ke pengaturan default awal?')) {
       setSiteConfig(defaultSiteConfig);
       setArticles(initialArticles);
@@ -218,63 +275,81 @@ export function App() {
       localStorage.removeItem('imm_commune_config');
       localStorage.removeItem('imm_commune_articles');
       localStorage.removeItem('imm_commune_zines');
+      const { error } = await saveSiteConfigRemote(defaultSiteConfig);
+      reportSyncError('Reset Konfigurasi', error);
     }
   };
 
-  const handleAddArticle = (newArticle) => {
+  const handleAddArticle = async (newArticle) => {
     setArticles(prev => [newArticle, ...prev]);
+    const { error } = await upsertArticleRemote(newArticle);
+    reportSyncError('Terbitkan Artikel', error);
   };
 
-  const handleUpdateArticle = (id, updatedFields) => {
+  const handleUpdateArticle = async (id, updatedFields) => {
     setArticles(prev => prev.map(art => art.id === id ? { ...art, ...updatedFields } : art));
     if (selectedArticle && selectedArticle.id === id) {
       setSelectedArticle(prev => ({ ...prev, ...updatedFields }));
     }
+    const { error } = await updateArticleFieldsRemote(id, updatedFields);
+    reportSyncError('Perbarui Artikel', error);
   };
 
-  const handleDeleteArticle = (id) => {
+  const handleDeleteArticle = async (id) => {
     if (window.confirm('Yakin ingin menghapus artikel ini?')) {
       setArticles(prev => prev.filter(art => art.id !== id));
       if (selectedArticle && selectedArticle.id === id) {
         setSelectedArticle(null);
       }
+      const { error } = await deleteArticleRemote(id);
+      reportSyncError('Hapus Artikel', error);
     }
   };
 
   // Handlers for Zine Management
-  const handleAddZine = (newZine) => {
+  const handleAddZine = async (newZine) => {
     setZines(prev => [newZine, ...prev]);
+    const { error } = await upsertZineRemote(newZine);
+    reportSyncError('Simpan Zine', error);
   };
 
-  const handleUpdateZine = (id, updatedFields) => {
+  const handleUpdateZine = async (id, updatedFields) => {
     setZines(prev => prev.map(z => z.id === id ? { ...z, ...updatedFields } : z));
+    const { error } = await updateZineFieldsRemote(id, updatedFields);
+    reportSyncError('Perbarui Zine', error);
   };
 
-  const handleDeleteZine = (id) => {
+  const handleDeleteZine = async (id) => {
     if (window.confirm('Yakin ingin menghapus berkas zine ini dari arsip?')) {
       setZines(prev => prev.filter(z => z.id !== id));
+      const { error } = await deleteZineRemote(id);
+      reportSyncError('Hapus Zine', error);
     }
   };
 
   const handleDownloadZine = (id) => {
-    setZines(prev => prev.map(z => z.id === id ? { ...z, downloads: (z.downloads || 0) + 1 } : z));
+    const target = zines.find(z => z.id === id);
+    const nextDownloads = (target?.downloads || 0) + 1;
+    setZines(prev => prev.map(z => z.id === id ? { ...z, downloads: nextDownloads } : z));
+    updateZineFieldsRemote(id, { downloads: nextDownloads });
   };
 
   // Handlers for Reader Interactions
   const handleLikeArticle = (id) => {
-    if (likedArticles.includes(id)) {
-      setLikedArticles(prev => prev.filter(item => item !== id));
-      setArticles(prev => prev.map(art => art.id === id ? { ...art, likes: Math.max(0, (art.likes || 1) - 1) } : art));
-      if (selectedArticle && selectedArticle.id === id) {
-        setSelectedArticle(prev => ({ ...prev, likes: Math.max(0, (prev.likes || 1) - 1) }));
-      }
-    } else {
-      setLikedArticles(prev => [...prev, id]);
-      setArticles(prev => prev.map(art => art.id === id ? { ...art, likes: (art.likes || 0) + 1 } : art));
-      if (selectedArticle && selectedArticle.id === id) {
-        setSelectedArticle(prev => ({ ...prev, likes: (prev.likes || 0) + 1 }));
-      }
+    const target = articles.find(art => art.id === id);
+    const alreadyLiked = likedArticles.includes(id);
+    const nextLikes = alreadyLiked
+      ? Math.max(0, (target?.likes || 1) - 1)
+      : (target?.likes || 0) + 1;
+
+    setLikedArticles(prev =>
+      alreadyLiked ? prev.filter(item => item !== id) : [...prev, id]
+    );
+    setArticles(prev => prev.map(art => art.id === id ? { ...art, likes: nextLikes } : art));
+    if (selectedArticle && selectedArticle.id === id) {
+      setSelectedArticle(prev => ({ ...prev, likes: nextLikes }));
     }
+    updateArticleFieldsRemote(id, { likes: nextLikes });
   };
 
   const handleToggleBookmark = (id) => {
@@ -286,13 +361,12 @@ export function App() {
   };
 
   const handleAddComment = (articleId, newComment) => {
-    setArticles(prev => prev.map(art => {
-      if (art.id === articleId) {
-        const comments = art.comments ? [newComment, ...art.comments] : [newComment];
-        return { ...art, comments, commentsCount: comments.length };
-      }
-      return art;
-    }));
+    const target = articles.find(art => art.id === articleId);
+    const nextComments = target?.comments ? [newComment, ...target.comments] : [newComment];
+
+    setArticles(prev => prev.map(art =>
+      art.id === articleId ? { ...art, comments: nextComments, commentsCount: nextComments.length } : art
+    ));
 
     if (selectedArticle && selectedArticle.id === articleId) {
       setSelectedArticle(prev => {
@@ -300,6 +374,11 @@ export function App() {
         return { ...prev, comments, commentsCount: comments.length };
       });
     }
+
+    updateArticleFieldsRemote(articleId, {
+      comments: nextComments,
+      commentsCount: nextComments.length,
+    });
   };
 
   // ==========================================
@@ -319,6 +398,8 @@ export function App() {
         onUpdateZine={handleUpdateZine}
         onDeleteZine={handleDeleteZine}
         onResetDefaults={handleResetDefaults}
+        supabaseConfigured={isSupabaseConfigured}
+        syncError={syncError}
         onBackToHome={() => {
           setIsAdminView(false);
           window.scrollTo({ top: 0, behavior: 'smooth' });

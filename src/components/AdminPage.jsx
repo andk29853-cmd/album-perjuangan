@@ -8,13 +8,14 @@ import {
   Bold, Italic, Underline, Strikethrough, Heading1, Heading2, Heading3, 
   List, ListOrdered, Quote, Minus, Type, Check,
   ArrowDownToLine, BookOpen, FileCheck, FileDown, FolderDown, File,
-  Video, Film, Play
+  Video, Film, Play, Cloud, AlertTriangle, Loader2
 } from 'lucide-react';
 import { 
   getAnalyticsSummary, 
   resetAnalyticsData 
 } from '../utils/analytics';
 import { isVideoMedia, getEmbedVideoUrl } from '../utils/media';
+import { uploadMediaToSupabase } from '../lib/supabase';
 
 export function AdminPage({ 
   siteConfig, 
@@ -28,6 +29,8 @@ export function AdminPage({
   onUpdateZine,
   onDeleteZine,
   onResetDefaults, 
+  supabaseConfigured = false,
+  syncError = '',
   onBackToHome, 
   onLogout 
 }) {
@@ -43,6 +46,7 @@ export function AdminPage({
     return initial;
   });
   const [savedNotice, setSavedNotice] = useState(false);
+  const [uploadingMedia, setUploadingMedia] = useState(false);
 
   // Zine Management State
   const [editingZineId, setEditingZineId] = useState(null);
@@ -115,84 +119,88 @@ export function AdminPage({
     }
   };
 
-  const handleHeroEmblemUpload = (e) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (file.size > 5 * 1024 * 1024) {
-        alert('Ukuran file logo maksimal 5MB');
+  const uploadSelectedFile = async (file, { maxSizeBytes, maxSizeLabel, folder, onSuccess }) => {
+    if (!file) return;
+    if (maxSizeBytes && file.size > maxSizeBytes) {
+      alert(`Ukuran file maksimal ${maxSizeLabel}`);
+      return;
+    }
+
+    if (supabaseConfigured) {
+      setUploadingMedia(true);
+      const { url, error } = await uploadMediaToSupabase(file, folder);
+      setUploadingMedia(false);
+      if (error || !url) {
+        alert(`Gagal mengunggah file ke Supabase Storage: ${error?.message || 'Periksa bucket commune-media.'}`);
         return;
       }
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setConfigForm(prev => ({ ...prev, heroEmblem: reader.result }));
-      };
-      reader.readAsDataURL(file);
+      onSuccess(url, true);
+      return;
     }
+
+    const reader = new FileReader();
+    reader.onloadend = () => onSuccess(reader.result, false);
+    reader.readAsDataURL(file);
+  };
+
+  const handleHeroEmblemUpload = (e) => {
+    uploadSelectedFile(e.target.files?.[0], {
+      maxSizeBytes: 5 * 1024 * 1024,
+      maxSizeLabel: '5MB',
+      folder: 'branding',
+      onSuccess: (result) => setConfigForm(prev => ({ ...prev, heroEmblem: result })),
+    });
   };
 
   const handleFooterLogoUpload = (e) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (file.size > 5 * 1024 * 1024) {
-        alert('Ukuran file logo footer maksimal 5MB');
-        return;
-      }
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setConfigForm(prev => ({ ...prev, footerLogo: reader.result }));
-      };
-      reader.readAsDataURL(file);
-    }
+    uploadSelectedFile(e.target.files?.[0], {
+      maxSizeBytes: 5 * 1024 * 1024,
+      maxSizeLabel: '5MB',
+      folder: 'branding',
+      onSuccess: (result) => setConfigForm(prev => ({ ...prev, footerLogo: result })),
+    });
   };
 
   const handleThumbnailUpload = (e) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const isVideo = file.type.startsWith('video/');
-      const maxSize = isVideo ? 30 * 1024 * 1024 : 10 * 1024 * 1024;
-      if (file.size > maxSize) {
-        alert(`Ukuran file ${isVideo ? 'video' : 'gambar'} maksimal ${isVideo ? '30MB' : '10MB'}`);
-        return;
-      }
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setArticleForm(prev => ({ ...prev, thumbnail: reader.result }));
-      };
-      reader.readAsDataURL(file);
-    }
+    if (!file) return;
+    const isVideo = file.type.startsWith('video/');
+    uploadSelectedFile(file, {
+      maxSizeBytes: isVideo ? 30 * 1024 * 1024 : 10 * 1024 * 1024,
+      maxSizeLabel: isVideo ? '30MB' : '10MB',
+      folder: isVideo ? 'videos' : 'thumbnails',
+      onSuccess: (result) => setArticleForm(prev => ({ ...prev, thumbnail: result })),
+    });
   };
 
   // Zine Cover & E-Book Upload Handlers
   const handleZineCoverUpload = (e) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (file.size > 8 * 1024 * 1024) {
-        alert('Ukuran gambar cover zine maksimal 8MB');
-        return;
-      }
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setZineForm(prev => ({ ...prev, cover: reader.result }));
-      };
-      reader.readAsDataURL(file);
-    }
+    uploadSelectedFile(e.target.files?.[0], {
+      maxSizeBytes: 8 * 1024 * 1024,
+      maxSizeLabel: '8MB',
+      folder: 'zines/covers',
+      onSuccess: (result) => setZineForm(prev => ({ ...prev, cover: result })),
+    });
   };
 
   const handleZineFileUpload = (e) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const sizeMB = (file.size / (1024 * 1024)).toFixed(1) + ' MB';
-      const reader = new FileReader();
-      reader.onloadend = () => {
+    if (!file) return;
+    const sizeMB = (file.size / (1024 * 1024)).toFixed(1) + ' MB';
+    uploadSelectedFile(file, {
+      maxSizeBytes: 50 * 1024 * 1024,
+      maxSizeLabel: '50MB',
+      folder: 'zines/files',
+      onSuccess: (result, isRemoteUrl) => {
         setZineForm(prev => ({
           ...prev,
-          fileData: reader.result,
+          fileUrl: isRemoteUrl ? result : prev.fileUrl,
+          fileData: isRemoteUrl ? '' : result,
           fileName: file.name,
-          fileSize: sizeMB
+          fileSize: sizeMB,
         }));
-      };
-      reader.readAsDataURL(file);
-    }
+      },
+    });
   };
 
   const handleSaveZine = (e) => {
@@ -504,6 +512,36 @@ export function AdminPage({
 
       {/* Main Admin Page Content */}
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 w-full">
+
+        {/* Cloud Sync Status Banner */}
+        {!supabaseConfigured ? (
+          <div className="mb-6 p-4 rounded-xl bg-amber-950/40 border border-amber-700/70 text-xs sm:text-sm text-amber-200 flex items-start gap-3">
+            <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+            <div>
+              <p className="font-bold text-amber-100">Mode Penyimpanan Lokal (Supabase Belum Terhubung)</p>
+              <p className="text-xs text-amber-200/80 mt-0.5">
+                Artikel yang diterbitkan saat ini hanya tersimpan di browser ini. Tambahkan <code className="bg-black/40 px-1.5 py-0.5 rounded">VITE_SUPABASE_URL</code> dan <code className="bg-black/40 px-1.5 py-0.5 rounded">VITE_SUPABASE_ANON_KEY</code> di Vercel Environment Variables agar semua admin & pembaca melihat konten yang sama secara global.
+              </p>
+            </div>
+          </div>
+        ) : syncError ? (
+          <div className="mb-6 p-4 rounded-xl bg-red-950/60 border border-red-700 text-xs sm:text-sm text-red-200 flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4 text-red-400 shrink-0" />
+            <span>{syncError}</span>
+          </div>
+        ) : (
+          <div className="mb-6 px-4 py-2.5 rounded-xl bg-emerald-950/30 border border-emerald-800/60 text-xs text-emerald-300 flex items-center gap-2">
+            <Cloud className="w-4 h-4 text-emerald-400 shrink-0" />
+            <span>Terhubung ke Cloud Supabase — setiap artikel, zine, dan pengaturan langsung tampil untuk semua pengunjung.</span>
+          </div>
+        )}
+
+        {uploadingMedia && (
+          <div className="mb-6 p-3.5 rounded-xl bg-zinc-900 border border-zinc-700 text-xs sm:text-sm text-zinc-200 flex items-center gap-2.5">
+            <Loader2 className="w-4 h-4 text-red-400 animate-spin shrink-0" />
+            <span>Mengunggah berkas media ke Cloud Storage Supabase... mohon tunggu sebentar.</span>
+          </div>
+        )}
         
         {/* Success Alert Banner */}
         {savedNotice && (
